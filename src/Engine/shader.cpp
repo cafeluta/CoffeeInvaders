@@ -7,7 +7,7 @@ Shader &Shader::use() {
     return *this;
 }
 
-void Shader::compile(const char *vertexSource, const char *fragmentSource, const char *geometrySource = nullptr) {
+void Shader::compile(const char *vertexSource, const char *fragmentSource, const char *geometrySource) {
     GLuint vertex, fragment, geometry;
 
     // vertex shader

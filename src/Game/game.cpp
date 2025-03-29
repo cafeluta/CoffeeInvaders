@@ -1,6 +1,4 @@
-#include "../../include/Engine/game.h"
-
-#include <glad/glad.h>
+#include "../../include/Game/game.h"
 
 Game::Game(GLuint width, GLuint height)
 : State(GAME_ACTIVE), Keys(), Width(width), Height(height) {
