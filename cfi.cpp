@@ -44,8 +44,8 @@ int main(int argc, char* argv[]) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    // GAME INITIALIZATIONS
     game.init();
-
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
 
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
         game.update(deltaTime);
 
         // render
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         game.render();
 
@@ -70,6 +70,7 @@ int main(int argc, char* argv[]) {
     }
 
     ResourceManager::clear();
+    game.shutdown();
     glfwTerminate();
     return 0;
 }

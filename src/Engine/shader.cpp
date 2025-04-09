@@ -37,6 +37,7 @@ void Shader::compile(const char *vertexSource, const char *fragmentSource, const
     glAttachShader(this->id, fragment);
     if (geometrySource != nullptr)
         glAttachShader(this->id, geometry);
+    glLinkProgram(this->id);
     checkCompileErrors(this->id, "PROGRAM");
     
     glDeleteShader(vertex);

@@ -3,7 +3,13 @@
 
 Texture2D::Texture2D() {
     glGenTextures(1, &this->id);
-};
+    this->InternalFormat = GL_RGB;
+    this->ImageFormat = GL_RGB;
+    this->WrapS = GL_REPEAT;
+    this->WrapT = GL_REPEAT;
+    this->FilterMin = GL_LINEAR;
+    this->FilterMax = GL_LINEAR;
+}
 
 void Texture2D::generate(GLuint width, GLuint height, unsigned char* data) {
     this->Width = width;
@@ -11,7 +17,7 @@ void Texture2D::generate(GLuint width, GLuint height, unsigned char* data) {
 
     // loading texture from image
     glBindTexture(GL_TEXTURE_2D, this->id);
-    glTexImage2D(this->id, 0, this->InternalFormat, width, height, 0, this->ImageFormat, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, this->InternalFormat, width, height, 0, this->ImageFormat, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     // wrap and filter option

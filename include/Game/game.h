@@ -2,6 +2,10 @@
 #define GAME_H
 
 #include "glad/glad.h"
+#include <string>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 enum GameState {
     GAME_ACTIVE,
@@ -16,7 +20,7 @@ public:
     GLuint Width, Height;
 
     Game(GLuint width, GLuint height);  // constructor
-    ~Game();  // destructor
+    // ~Game();  // destructor
 
     void init();  // initialization
 
@@ -24,6 +28,8 @@ public:
     void processInput(float dt);  // dt == delta time
     void update(float dt);
     void render();
+
+    void shutdown();
 };
 
 #endif

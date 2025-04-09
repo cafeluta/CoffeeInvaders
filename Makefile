@@ -32,6 +32,10 @@ $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
+run:
+	make all
+	./game
+
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
 
