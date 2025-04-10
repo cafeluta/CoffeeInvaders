@@ -56,9 +56,11 @@ void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec
     this->shader.setMatrix4("model", model);
     this->shader.setVector3f("spriteColor", color);
 
+    // activating the texture we want to use for this sprite
     glActiveTexture(GL_TEXTURE0);
     texture.bind();
 
+    // OpenGl now knows to map the triangles based on the given vertices in initRenderData to the given texture
     glBindVertexArray(this->quadVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);

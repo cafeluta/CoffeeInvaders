@@ -10,3 +10,4 @@ void main()
     vec4 texColor = texture(image, TexCoords);
     FragColor = vec4(spriteColor, 1.0) * texColor;
 }
+    

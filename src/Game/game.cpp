@@ -12,15 +12,20 @@ Game::Game(GLuint width, GLuint height)
 void Game::init() {
     // load shaders
     ResourceManager::loadShader("shaders/shader.vs", "shaders/shader.fs", nullptr, "sprite");
+
+    // load the image texture
+    ResourceManager::loadTexture2D("assets/awesomeface.png", true, "face");
+
     glm::mat4 projection = glm::ortho(0.0f, (float)(this->Width), (float)(this->Height), 0.0f, -1.0f, 1.0f);  // we normalize the coords
+    
+    // setting the image as the active texture
     ResourceManager::getShader("sprite").use().setInteger("image", 0);
     ResourceManager::getShader("sprite").setMatrix4("projection", projection);
 
     // render controls
     Shader myShader;
     myShader = ResourceManager::getShader("sprite");
-    Renderer = new SpriteRenderer(myShader);
-    ResourceManager::loadTexture2D("assets/awesomeface.png", true, "face");
+    Renderer = new SpriteRenderer(myShader);  // we need a shader to initialize a new sprite
 }
 
 void Game::update(float dt) {

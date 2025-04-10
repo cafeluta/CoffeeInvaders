@@ -1,14 +1,9 @@
 #include "../../include/Engine/texture.h"
 #include <glad/glad.h>
 
-Texture2D::Texture2D() {
+Texture2D::Texture2D()
+    : InternalFormat(GL_RGB), ImageFormat(GL_RGB), WrapS(GL_REPEAT), WrapT(GL_REPEAT), FilterMin(GL_LINEAR), FilterMax(GL_LINEAR) {
     glGenTextures(1, &this->id);
-    this->InternalFormat = GL_RGB;
-    this->ImageFormat = GL_RGB;
-    this->WrapS = GL_REPEAT;
-    this->WrapT = GL_REPEAT;
-    this->FilterMin = GL_LINEAR;
-    this->FilterMax = GL_LINEAR;
 }
 
 void Texture2D::generate(GLuint width, GLuint height, unsigned char* data) {

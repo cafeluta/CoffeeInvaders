@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
         // update state
         game.update(deltaTime);
 
-        // render
+        // render (drawing stuff to screen)
         glClearColor(1.0f, 1.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         game.render();
@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
     }
 
     ResourceManager::clear();
-    game.shutdown();
+    game.shutdown();  // this must be before glfwTerminate so we don't receive a segfault
     glfwTerminate();
     return 0;
 }
