@@ -46,9 +46,9 @@ void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec
     model = glm::translate(model, glm::vec3(position, 0.0f));  // puts the sprite in te right pos
 
     // rotating the sprite around its center
-    model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));  // temporarily going to the center of the sprite
-    model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));  // going back
+    // model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));  // temporarily going to the center of the sprite
+    // model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+    // model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));  // going back
 
     model = glm::scale(model, glm::vec3(size, 1.0f));
 

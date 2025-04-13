@@ -11,8 +11,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // constants
-const int SCR_WIDTH = 800;
-const int SCR_HEIGHT = 600;
+const int SCR_WIDTH = 640;
+const int SCR_HEIGHT = 480;
 
 Game game(SCR_WIDTH, SCR_HEIGHT);
 
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
         game.update(deltaTime);
 
         // render (drawing stuff to screen)
-        glClearColor(1.0f, 1.0f, 0.5f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         game.render();
 

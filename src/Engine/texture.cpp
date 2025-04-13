@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 
 Texture2D::Texture2D()
-    : InternalFormat(GL_RGB), ImageFormat(GL_RGB), WrapS(GL_REPEAT), WrapT(GL_REPEAT), FilterMin(GL_LINEAR), FilterMax(GL_LINEAR) {
+    : InternalFormat(GL_RGB), ImageFormat(GL_RGB), WrapS(GL_CLAMP_TO_EDGE), WrapT(GL_CLAMP_TO_EDGE), FilterMin(GL_NEAREST), FilterMax(GL_NEAREST) {
     glGenTextures(1, &this->id);
 }
 

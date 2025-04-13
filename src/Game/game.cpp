@@ -14,7 +14,10 @@ void Game::init() {
     ResourceManager::loadShader("shaders/shader.vs", "shaders/shader.fs", nullptr, "sprite");
 
     // load the image texture
-    ResourceManager::loadTexture2D("assets/awesomeface.png", true, "face");
+    ResourceManager::loadTexture2D("assets/spaceship01.png", true, "spaceship");
+
+    // load the background
+    ResourceManager::loadTexture2D("assets/background01.png", true, "background");
 
     glm::mat4 projection = glm::ortho(0.0f, (float)(this->Width), (float)(this->Height), 0.0f, -1.0f, 1.0f);  // we normalize the coords
     
@@ -23,9 +26,7 @@ void Game::init() {
     ResourceManager::getShader("sprite").setMatrix4("projection", projection);
 
     // render controls
-    Shader myShader;
-    myShader = ResourceManager::getShader("sprite");
-    Renderer = new SpriteRenderer(myShader);  // we need a shader to initialize a new sprite
+    Renderer = new SpriteRenderer(ResourceManager::getShader("sprite"));  // we need a shader to initialize a new sprite
 }
 
 void Game::update(float dt) {
@@ -37,9 +38,13 @@ void Game::processInput(float dt) {
 }
 
 void Game::render() {
-    Texture2D myTexture;
-    myTexture = ResourceManager::getTexture2D("face");
-    Renderer->drawSprite(myTexture, glm::vec2(200.0f, 200.0f), glm::vec2(300.0f, 400.0f), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    if (this->State == GAME_ACTIVE) {
+        // render the background
+        Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(640.0f, 480.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+        // render the spaceship sprite
+        Renderer->drawSprite(ResourceManager::getTexture2D("spaceship"), glm::vec2(550.0f, 300.0f), glm::vec2(64.0f, 64.0f), 45.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    }
 }
 
 void Game::shutdown() {
