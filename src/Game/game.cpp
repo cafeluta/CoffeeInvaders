@@ -19,6 +19,17 @@ void Game::init() {
     // load the background
     ResourceManager::loadTexture2D("assets/background01.png", true, "background");
 
+    // load the blocks
+    ResourceManager::loadTexture2D("assets/block.png", false, "block");
+    ResourceManager::loadTexture2D("assets/block_solid.png", false, "block_solid");
+
+    // load the levels
+    GameLevel one; one.load("levels/one.lvl", this->Width, this->Height / 2);
+    // add more later
+
+    this->Levels.push_back(one);
+    this->Level = 0;
+
     glm::mat4 projection = glm::ortho(0.0f, (float)(this->Width), (float)(this->Height), 0.0f, -1.0f, 1.0f);  // we normalize the coords
     
     // setting the image as the active texture
@@ -42,8 +53,12 @@ void Game::render() {
         // render the background
         Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(640.0f, 480.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
+        // render the level blocks
+        this->Levels[this->Level].draw(*Renderer);
+
         // render the spaceship sprite
         Renderer->drawSprite(ResourceManager::getTexture2D("spaceship"), glm::vec2(550.0f, 300.0f), glm::vec2(64.0f, 64.0f), 45.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        // TODO make the spaceship the player
     }
 }
 

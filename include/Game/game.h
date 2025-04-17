@@ -1,7 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "glad/glad.h"
+#include "game_level.h"
+
+#include <vector>
 #include <string>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -18,6 +20,10 @@ public:
     GameState State;
     bool Keys[1024];  // using this for inputs
     GLuint Width, Height;
+
+    // newly added (levels)
+    std::vector<GameLevel> Levels;
+    GLuint Level;
 
     Game(GLuint width, GLuint height);  // constructor
     // ~Game();  // destructor
