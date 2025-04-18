@@ -1,6 +1,7 @@
 #include "../../include/Game/game_level.h"
 #include "../../include/Engine/resource_manager.h"
 #include "../../include/Engine/sprite_renderer.h"
+#include "../../include/config.h"
 
 #include <glad/glad.h>
 #include <fstream>
@@ -53,7 +54,7 @@ void GameLevel::init(std::vector<std::vector<GLuint>> tileData, GLuint levelWidt
                 obj.IsSolid = true;
                 this->Bricks.push_back(obj);
             } else if (tileData[y][x] > 1) {
-                glm::vec3 color = glm::vec3(1.0f);
+                glm::vec3 color = COLOR_WHITE;
                 switch (tileData[y][x]) {
                     case 2:
                         color = glm::vec3(0.2f, 0.6f, 1.0f);

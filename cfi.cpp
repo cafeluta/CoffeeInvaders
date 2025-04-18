@@ -1,18 +1,14 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 #include "include/Game/game.h"
 #include "include/Engine/resource_manager.h"
+#include "include/config.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 // callbacks
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
-// constants
-const int SCR_WIDTH = 640;
-const int SCR_HEIGHT = 480;
 
 Game game(SCR_WIDTH, SCR_HEIGHT);
 

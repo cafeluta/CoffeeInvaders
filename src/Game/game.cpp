@@ -1,11 +1,9 @@
 #include "../../include/Game/game.h"
 #include "../../include/Engine/sprite_renderer.h"
 #include "../../include/Engine/resource_manager.h"
+#include "../../include/config.h"
 
 #include <GLFW/glfw3.h>
-
-const glm::vec2 PLAYER_SIZE(64.0f, 64.0f);
-const float PLAYER_VELOCITY(300.0f);
 
 SpriteRenderer* Renderer;
 GameObject* Player;
@@ -17,20 +15,20 @@ Game::Game(GLuint width, GLuint height)
 
 void Game::init() {
     // load shaders
-    ResourceManager::loadShader("shaders/shader.vs", "shaders/shader.fs", nullptr, "sprite");
+    ResourceManager::loadShader(SHADER_VERTEX, SHADER_FRAGMENT, nullptr, "sprite");
 
     // load the player texture
-    ResourceManager::loadTexture2D("assets/spaceship01.png", true, "spaceship");
+    ResourceManager::loadTexture2D(TEXTURE_SPACESHIP, true, "spaceship");
 
     // load the background
-    ResourceManager::loadTexture2D("assets/background01.png", true, "background");
+    ResourceManager::loadTexture2D(TEXTURE_BACKGROUND, true, "background");
 
     // load the blocks
-    ResourceManager::loadTexture2D("assets/block.png", false, "block");
-    ResourceManager::loadTexture2D("assets/block_solid.png", false, "block_solid");
+    ResourceManager::loadTexture2D(TEXTURE_BLOCK, false, "block");
+    ResourceManager::loadTexture2D(TEXTURE_BLOCK_SOLID, false, "block_solid");
 
     // load the levels
-    GameLevel one; one.load("levels/one.lvl", this->Width, this->Height / 2);
+    GameLevel one; one.load(LEVEL_ONE, this->Width, this->Height / 2);
     // add more later
 
     this->Levels.push_back(one);
@@ -82,7 +80,7 @@ void Game::processInput(float dt) {
 void Game::render() {
     if (this->State == GAME_ACTIVE) {
         // render the background
-        Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(640.0f, 480.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(SCR_WIDTH, SCR_HEIGHT), 0.0f, COLOR_WHITE);
 
         // render the level blocks
         this->Levels[this->Level].draw(*Renderer);
