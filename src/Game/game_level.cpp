@@ -53,26 +53,14 @@ void GameLevel::init(std::vector<std::vector<GLuint>> tileData, GLuint levelWidt
                 GameObject obj(pos, size, ResourceManager::getTexture2D("block_solid"), glm::vec3(0.8f, 0.8f, 0.7f));
                 obj.IsSolid = true;
                 this->Bricks.push_back(obj);
-            } else if (tileData[y][x] > 1) {
-                glm::vec3 color = COLOR_WHITE;
-                switch (tileData[y][x]) {
-                    case 2:
-                        color = glm::vec3(0.2f, 0.6f, 1.0f);
-                        break;
-                    case 3:
-                        color = glm::vec3(0.0f, 0.7f, 0.0f);
-                        break;
-                    case 4:
-                        color = glm::vec3(0.8f, 0.8f, 0.4f);
-                        break;
-                    case 5:
-                        color = glm::vec3(1.0f, 0.5f, 0.0f);
-                        break;
-                    default:
-                        std::cout << "Undefined tile code!\n" << std::endl;
-                        exit(EXIT_FAILURE);
-                }
-                
+            } else {
+                int code = tileData[y][x];
+                float darken = 1.0f - 0.18f * (code - 2);  // making it darker and darker
+
+                if (darken < 0.2f) darken = 0.3f;  // not too dark now :))
+
+                glm::vec3 color = glm::vec3(darken);
+
                 glm::vec2 pos(unitWidth * x, unitHeight * y);
                 glm::vec2 size(unitWidth, unitHeight);
                 this->Bricks.push_back(GameObject(pos, size, ResourceManager::getTexture2D("block"), color));

@@ -12,12 +12,17 @@ const unsigned int SCR_HEIGHT = 600;
 const float PLAYER_VELOCITY = 300.0f;
 const glm::vec2 PLAYER_SIZE(64.0f, 64.0f);
 
+// PROJECTILE COFFEE BEAN
+const float PROJECTILE_RADIUS = 9.5f;
+const glm::vec2 INITIAL_PROJECTILE_VELOCITY(100.0f, -350.0f);
+
 // TEXTURES
 const char* const TEXTURE_FACE = "assets/awesomeface.png";
 const char* const TEXTURE_BACKGROUND = "assets/background01.png";
-const char* const TEXTURE_BLOCK = "assets/block.png";
+const char* const TEXTURE_BLOCK = "assets/coffee_block02.png";
 const char* const TEXTURE_BLOCK_SOLID = "assets/block_solid.png";
 const char* const TEXTURE_SPACESHIP = "assets/spaceship01.png";
+const char* const TEXTURE_COFFEE_BEAN = "assets/coffee_bean01.png";
 
 // SHADERS
 const char* const SHADER_VERTEX = "shaders/shader.vs";

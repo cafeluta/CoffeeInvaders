@@ -1,12 +1,14 @@
 #include "../../include/Game/game.h"
 #include "../../include/Engine/sprite_renderer.h"
 #include "../../include/Engine/resource_manager.h"
+#include "../../include/Game/projectile_object.h"
 #include "../../include/config.h"
 
 #include <GLFW/glfw3.h>
 
 SpriteRenderer* Renderer;
 GameObject* Player;
+ProjectileObject* Bean;
 
 Game::Game(GLuint width, GLuint height)
 : State(GAME_ACTIVE), Keys(), Width(width), Height(height) {
@@ -24,8 +26,11 @@ void Game::init() {
     ResourceManager::loadTexture2D(TEXTURE_BACKGROUND, true, "background");
 
     // load the blocks
-    ResourceManager::loadTexture2D(TEXTURE_BLOCK, false, "block");
+    ResourceManager::loadTexture2D(TEXTURE_BLOCK, true, "block");
     ResourceManager::loadTexture2D(TEXTURE_BLOCK_SOLID, false, "block_solid");
+
+    // loaod the coffee bean projectile
+    ResourceManager::loadTexture2D(TEXTURE_COFFEE_BEAN, true, "bean");
 
     // load the levels
     GameLevel one; one.load(LEVEL_ONE, this->Width, this->Height / 2);
@@ -49,10 +54,14 @@ void Game::init() {
         this->Height - PLAYER_SIZE.y
     );
     Player = new GameObject(playerPosition, PLAYER_SIZE, ResourceManager::getTexture2D("spaceship"));
+
+    // projectile bean
+    glm::vec2 beanPos = playerPosition + glm::vec2(PLAYER_SIZE.x / 2.0f - PROJECTILE_RADIUS, -PROJECTILE_RADIUS * 2.0f);
+    Bean = new ProjectileObject(beanPos, PROJECTILE_RADIUS, INITIAL_PROJECTILE_VELOCITY, ResourceManager::getTexture2D("bean"));
 }
 
 void Game::update(float dt) {
-
+    Bean->move(dt, this->Width);
 }
 
 void Game::processInput(float dt) {
@@ -74,6 +83,8 @@ void Game::processInput(float dt) {
             if (Player->Position.y + velocity <= this->Height - Player->Size.y)
                 Player->Position.y += velocity;
         }
+        if (this->Keys[GLFW_KEY_SPACE])
+            Bean->Stuck = false;
     }
 }
 
@@ -87,6 +98,8 @@ void Game::render() {
 
         // render the spaceship sprite
         Player->draw(*Renderer);
+
+        Bean->draw(*Renderer);
     }
 }
 
