@@ -14,7 +14,9 @@ const glm::vec2 PLAYER_SIZE(64.0f, 64.0f);
 
 // PROJECTILE COFFEE BEAN
 const float PROJECTILE_RADIUS = 9.5f;
-const glm::vec2 INITIAL_PROJECTILE_VELOCITY(100.0f, -350.0f);
+const float PROJECTILE_SPEED = -400.0f;
+const glm::vec2 INITIAL_PROJECTILE_VELOCITY(100.0f, -100.0f);
+const float SHOOT_COOLDOWN = 0.5f;
 
 // TEXTURES
 const char* const TEXTURE_FACE = "assets/awesomeface.png";

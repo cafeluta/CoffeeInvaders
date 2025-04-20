@@ -4,14 +4,17 @@
 #include "../../include/Game/projectile_object.h"
 #include "../../include/config.h"
 
+#include <algorithm>
 #include <GLFW/glfw3.h>
 
 SpriteRenderer* Renderer;
 GameObject* Player;
-ProjectileObject* Bean;
+
+std::vector<ProjectileObject> Beans;
+float lastShotTime = 0.0f;
 
 Game::Game(GLuint width, GLuint height)
-: State(GAME_ACTIVE), Keys(), Width(width), Height(height) {
+: State(GAME_ACTIVE), Keys(), KeysProcessed(), Width(width), Height(height) {
 
 }
 
@@ -55,13 +58,14 @@ void Game::init() {
     );
     Player = new GameObject(playerPosition, PLAYER_SIZE, ResourceManager::getTexture2D("spaceship"));
 
-    // projectile bean
-    glm::vec2 beanPos = playerPosition + glm::vec2(PLAYER_SIZE.x / 2.0f - PROJECTILE_RADIUS, -PROJECTILE_RADIUS * 2.0f);
-    Bean = new ProjectileObject(beanPos, PROJECTILE_RADIUS, INITIAL_PROJECTILE_VELOCITY, ResourceManager::getTexture2D("bean"));
+    // bean
+    this->KeysProcessed[GLFW_KEY_SPACE] = false;
 }
 
 void Game::update(float dt) {
-    Bean->move(dt, this->Width);
+    for (ProjectileObject &bean : Beans)
+        bean.move(dt, this->Width);
+    removeProjectiles(Beans);
 }
 
 void Game::processInput(float dt) {
@@ -83,8 +87,21 @@ void Game::processInput(float dt) {
             if (Player->Position.y + velocity <= this->Height - Player->Size.y)
                 Player->Position.y += velocity;
         }
-        if (this->Keys[GLFW_KEY_SPACE])
-            Bean->Stuck = false;
+
+        // don't shoot like a machine gun please!
+        float currentTime = glfwGetTime();
+
+        if (this->Keys[GLFW_KEY_SPACE] && currentTime - lastShotTime >= SHOOT_COOLDOWN){
+            this->KeysProcessed[GLFW_KEY_SPACE] = true;
+
+            glm::vec2 beanPos = Player->Position + glm::vec2(Player->Size.x / 2.0f - PROJECTILE_RADIUS, -PROJECTILE_RADIUS * 2.0f);
+            glm::vec2 beanVelocity(Player->Velocity.x * 0.5f, PROJECTILE_SPEED);  // player velocity is set temporarily to 0.0f maybe in the future we can rotate the spaceship so we modify it (maybe)
+            ProjectileObject newBean(beanPos, PROJECTILE_RADIUS, beanVelocity, ResourceManager::getTexture2D("bean"));
+            newBean.Stuck = false;
+            Beans.push_back(newBean);
+
+            lastShotTime = currentTime;
+        }
     }
 }
 
@@ -99,8 +116,19 @@ void Game::render() {
         // render the spaceship sprite
         Player->draw(*Renderer);
 
-        Bean->draw(*Renderer);
+        // render multiple beans
+        for (ProjectileObject &bean : Beans)
+            bean.draw(*Renderer);
     }
+}
+
+void Game::removeProjectiles(std::vector<ProjectileObject> &projectiles) {
+    projectiles.erase(
+        std::remove_if(projectiles.begin(), projectiles.end(), [](const ProjectileObject &p){  // lambda function to acces every projectile of the given vector
+            return p.Position.y + p.Size.y < 0.0f;
+        }),
+        projectiles.end()
+    );
 }
 
 void Game::shutdown() {

@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "game_level.h"
+#include "projectile_object.h"
 
 #include <vector>
 #include <string>
@@ -19,9 +20,10 @@ class Game {
 public: 
     GameState State;
     bool Keys[1024];  // using this for inputs
+    bool KeysProcessed[1024];
     GLuint Width, Height;
 
-    // newly added (levels)
+    // levels
     std::vector<GameLevel> Levels;
     GLuint Level;
 
@@ -34,6 +36,9 @@ public:
     void processInput(float dt);  // dt == delta time
     void update(float dt);
     void render();
+
+    // removing off screen projectiles
+    void removeProjectiles(std::vector<ProjectileObject> &projectiles);
 
     void shutdown();
 };

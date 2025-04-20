@@ -16,6 +16,7 @@ public:
 
     glm::vec2 move(float dt, GLuint windowWidth);
     void reset(glm::vec2 position, glm::vec2 velocity);
+    void erase();
 };
 
 #endif
