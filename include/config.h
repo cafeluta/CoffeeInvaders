@@ -22,7 +22,7 @@ const float SHOOT_COOLDOWN = 0.5f;
 const char* const TEXTURE_FACE = "assets/awesomeface.png";
 const char* const TEXTURE_BACKGROUND = "assets/background01.png";
 const char* const TEXTURE_BLOCK = "assets/coffee_block02.png";
-const char* const TEXTURE_BLOCK_SOLID = "assets/block_solid.png";
+const char* const TEXTURE_BLOCK_SOLID = "assets/coffee_block_solid01.png";
 const char* const TEXTURE_SPACESHIP = "assets/spaceship01.png";
 const char* const TEXTURE_COFFEE_BEAN = "assets/coffee_bean01.png";
 

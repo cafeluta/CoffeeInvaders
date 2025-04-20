@@ -30,7 +30,7 @@ void Game::init() {
 
     // load the blocks
     ResourceManager::loadTexture2D(TEXTURE_BLOCK, true, "block");
-    ResourceManager::loadTexture2D(TEXTURE_BLOCK_SOLID, false, "block_solid");
+    ResourceManager::loadTexture2D(TEXTURE_BLOCK_SOLID, true, "block_solid");
 
     // loaod the coffee bean projectile
     ResourceManager::loadTexture2D(TEXTURE_COFFEE_BEAN, true, "bean");

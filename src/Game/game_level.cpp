@@ -50,12 +50,12 @@ void GameLevel::init(std::vector<std::vector<GLuint>> tileData, GLuint levelWidt
             if (tileData[y][x] == 1) {  // solid obj
                 glm::vec2 pos(unitWidth * x, unitHeight * y);
                 glm::vec2 size(unitWidth, unitHeight);
-                GameObject obj(pos, size, ResourceManager::getTexture2D("block_solid"), glm::vec3(0.8f, 0.8f, 0.7f));
+                GameObject obj(pos, size, ResourceManager::getTexture2D("block_solid"), glm::vec3(0.2f, 0.2f, 0.2f));  // meh maybe change the shade of the block later (not satisfied rn)
                 obj.IsSolid = true;
                 this->Bricks.push_back(obj);
             } else {
                 int code = tileData[y][x];
-                float darken = 1.0f - 0.18f * (code - 2);  // making it darker and darker
+                float darken = 1.0f - 0.20f * (code - 2);  // making it darker and darker
 
                 if (darken < 0.2f) darken = 0.3f;  // not too dark now :))
 
