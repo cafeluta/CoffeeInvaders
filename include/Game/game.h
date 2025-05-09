@@ -3,6 +3,7 @@
 
 #include "game_level.h"
 #include "projectile_object.h"
+#include "collision.h"
 
 #include <vector>
 #include <string>
@@ -39,6 +40,9 @@ public:
 
     // removing off screen projectiles
     void removeProjectiles(std::vector<ProjectileObject> &projectiles);
+
+    // collisions
+    void doCollisions();
 
     void shutdown();
 };

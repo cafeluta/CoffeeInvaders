@@ -66,6 +66,7 @@ void Game::update(float dt) {
     for (ProjectileObject &bean : Beans)
         bean.move(dt, this->Width);
     removeProjectiles(Beans);
+    this->doCollisions();
 }
 
 void Game::processInput(float dt) {
@@ -129,6 +130,19 @@ void Game::removeProjectiles(std::vector<ProjectileObject> &projectiles) {
         }),
         projectiles.end()
     );
+}
+
+void Game::doCollisions() {
+    for (GameObject &box : this->Levels[this->Level].Bricks){  // every block
+        if (!box.IsDestroyed){  // if the block isn't destroyed
+            for (ProjectileObject &bean : Beans) {  // we test every bean that interacts with the blocks
+                if (checkCollision(bean, box)) {
+                    if (!box.IsSolid)  // test if the block is undestructable
+                        box.IsDestroyed = true;
+                }
+            }
+        }
+    }       
 }
 
 void Game::shutdown() {
