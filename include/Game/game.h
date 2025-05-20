@@ -41,6 +41,9 @@ public:
     // removing off screen projectiles
     void removeProjectiles(std::vector<ProjectileObject> &projectiles);
 
+    // removing destroyed boxes so we are memory efficient :)
+    void removeDestroyedBricks();
+
     // collisions
     void doCollisions();
 

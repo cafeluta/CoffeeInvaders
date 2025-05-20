@@ -11,7 +11,6 @@
 void GameLevel::load(const char* file, GLuint levelWidth, GLuint levelHeight) {
     this->Bricks.clear();
     GLuint tileCode;
-    GameLevel level;
     
     std::string buffer;  // used for reading lines from file
     std::ifstream fstream(file);  // stream of data from file
@@ -47,10 +46,11 @@ void GameLevel::init(std::vector<std::vector<GLuint>> tileData, GLuint levelWidt
     // initialize level tiles
     for (GLuint y = 0; y < height; y++) {
         for (GLuint x = 0; x < width; x++) {
-            if (tileData[y][x] == 1) {  // solid obj
+            if (tileData[y][x] == -1) {  // solid obj
                 glm::vec2 pos(unitWidth * x, unitHeight * y);
                 glm::vec2 size(unitWidth, unitHeight);
                 GameObject obj(pos, size, ResourceManager::getTexture2D("block_solid"), glm::vec3(0.2f, 0.2f, 0.2f));  // meh maybe change the shade of the block later (not satisfied rn)
+                // make this brick a solid block
                 obj.IsSolid = true;
                 this->Bricks.push_back(obj);
             } else {
@@ -63,7 +63,8 @@ void GameLevel::init(std::vector<std::vector<GLuint>> tileData, GLuint levelWidt
 
                 glm::vec2 pos(unitWidth * x, unitHeight * y);
                 glm::vec2 size(unitWidth, unitHeight);
-                this->Bricks.push_back(GameObject(pos, size, ResourceManager::getTexture2D("block"), color));
+                // each brick has it's own healthpoints based on code
+                this->Bricks.push_back(GameObject(pos, size, ResourceManager::getTexture2D("block"), color, glm::vec2(1.0f, 1.0f), code));
             }
         }
     }

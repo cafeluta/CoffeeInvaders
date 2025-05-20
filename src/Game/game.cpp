@@ -67,6 +67,7 @@ void Game::update(float dt) {
         bean.move(dt, this->Width);
     removeProjectiles(Beans);
     this->doCollisions();
+    this->removeDestroyedBricks();
 }
 
 void Game::processInput(float dt) {
@@ -126,9 +127,19 @@ void Game::render() {
 void Game::removeProjectiles(std::vector<ProjectileObject> &projectiles) {
     projectiles.erase(
         std::remove_if(projectiles.begin(), projectiles.end(), [](const ProjectileObject &p){  // lambda function to acces every projectile of the given vector
-            return p.Position.y + p.Size.y < 0.0f;
+            // remove beans if they are off screen or they have no longer enough hp
+            return (p.Position.y + p.Size.y < 0.0f) || (p.HP <= 0);
         }),
         projectiles.end()
+    );
+}
+
+void Game::removeDestroyedBricks() {
+    auto &bricks = this->Levels[this->Level].Bricks;
+    bricks.erase(
+        std::remove_if(bricks.begin(), bricks.end(),
+            [] (const GameObject &box) { return box.IsDestroyed; }),
+        bricks.end()
     );
 }
 
@@ -137,8 +148,16 @@ void Game::doCollisions() {
         if (!box.IsDestroyed){  // if the block isn't destroyed
             for (ProjectileObject &bean : Beans) {  // we test every bean that interacts with the blocks
                 if (checkCollision(bean, box)) {
-                    if (!box.IsSolid)  // test if the block is undestructable
-                        box.IsDestroyed = true;
+                    if (!box.IsSolid) { // test if the block is undestructable
+                        // take out hp on each hit
+                        box.HP--;
+                        bean.HP--;
+
+                        // delete the box if it has no more hp
+                        if (box.HP <= 0) {
+                            box.IsDestroyed = true;
+                        }
+                    }
                 }
             }
         }
