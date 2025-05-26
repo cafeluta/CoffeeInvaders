@@ -2,6 +2,7 @@
 #include "../../include/Engine/sprite_renderer.h"
 #include "../../include/Engine/resource_manager.h"
 #include "../../include/Game/projectile_object.h"
+#include "../../include/Game/particle.h"
 #include "../../include/config.h"
 
 #include <algorithm>
@@ -12,6 +13,9 @@ GameObject* Player;
 
 std::vector<ProjectileObject> Beans;
 float lastShotTime = 0.0f;
+
+std::vector<Particle> Particles;
+Texture2D* ParticleTexture = nullptr;
 
 Game::Game(GLuint width, GLuint height)
 : State(GAME_ACTIVE), Keys(), KeysProcessed(), Width(width), Height(height) {
@@ -33,8 +37,11 @@ void Game::init() {
     ResourceManager::loadTexture2D(TEXTURE_BLOCK_SOLID, true, "block_solid");
     ResourceManager::loadTexture2D(TEXTURE_BREAK, true, "break_block");
 
-    // loaod the coffee bean projectile
+    // load the coffee bean projectile
     ResourceManager::loadTexture2D(TEXTURE_COFFEE_BEAN, true, "bean");
+
+    // load the particle spritesheet
+    ResourceManager::loadTexture2D(TEXTURE_PARTICLE_SHEET, true, "particle_sheet");
 
     // load the levels
     GameLevel one; one.load(LEVEL_ONE, this->Width, this->Height / 2);
@@ -61,14 +68,26 @@ void Game::init() {
 
     // bean
     this->KeysProcessed[GLFW_KEY_SPACE] = false;
+
+    // particle
+    ParticleTexture = &ResourceManager::getTexture2D("particle_sheet");
 }
 
 void Game::update(float dt) {
     for (ProjectileObject &bean : Beans)
         bean.move(dt, this->Width);
+
     removeProjectiles(Beans);
+
     this->doCollisions();
     this->removeDestroyedBricks();
+
+    for (auto& p : Particles)
+        p.update(dt);
+    Particles.erase(
+        std::remove_if(Particles.begin(), Particles.end(), [](const Particle& p){ return p.Life <= 0.0f; }),
+        Particles.end()
+    );
 }
 
 void Game::processInput(float dt) {
@@ -122,6 +141,11 @@ void Game::render() {
         // render multiple beans
         for (ProjectileObject &bean : Beans)
             bean.draw(*Renderer);
+
+        // render particles
+        for (Particle& p : Particles) {
+            Renderer->drawSpriteAnim(p.Sprite, p.Position, p.Size, p.Rotation, p.Color, p.Frame, p.MaxFrames);
+        }
     }
 }
 
@@ -153,6 +177,17 @@ void Game::doCollisions() {
                         // take out hp on each hit
                         box.HP--;
                         bean.HP--;
+
+                        // draw particles
+                        int maxFrames = 7;
+                        float frameDuration = 0.07f;
+                        for (int i = 0; i < 8; ++i) {
+                            glm::vec2 partPos = box.Position + glm::vec2(rand() % (int)box.Size.x, rand() % (int)box.Size.y);
+                            glm::vec2 partVel = glm::vec2((rand()%20-10)/10.0f, 60.0f + rand()%40); // random X, rapid pe Y
+                            glm::vec3 color = glm::vec3(0.7f, 0.5f, 0.2f); // sau orice culoare vrei
+                            Particles.emplace_back(partPos, glm::vec2(12,12), *ParticleTexture, color, partVel, 0.7f, maxFrames, frameDuration);
+                        }
+
 
                         // delete the box if it has no more hp
                         if (box.HP <= 0) {

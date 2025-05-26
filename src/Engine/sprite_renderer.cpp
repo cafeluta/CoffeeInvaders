@@ -73,3 +73,26 @@ void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec
     // reset to texture 0 (the sprite)
     glActiveTexture(GL_TEXTURE0);
 }
+
+void SpriteRenderer::drawSpriteAnim(Texture2D &texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color, int frame, int maxFrames) {
+    this->shader.use();
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(position, 0.0f));
+    model = glm::scale(model, glm::vec3(size, 1.0f));
+    this->shader.setMatrix4("model", model);
+    this->shader.setVector3f("spriteColor", color);
+
+    this->shader.setFloat("frame", (float)frame);
+    this->shader.setFloat("framesPerRow", 3.0f);
+    this->shader.setFloat("frameSize", 1.0f / 3.0f);
+    this->shader.setFloat("frameRows", 3.0f);
+
+    glActiveTexture(GL_TEXTURE0);
+    texture.bind();
+    this->shader.setInteger("image", 0);
+
+    glBindVertexArray(this->quadVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
+}
