@@ -12,9 +12,9 @@ Particle:: Particle(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 c
 }
 
 void Particle::update(float dt) {
-    if (this->Life > 0.0f) {
+    if (true) {
         this->Position += this->Velocity * dt;
-        this->Life -= dt;
+        // this->Life -= dt;
         this->FrameTime += dt;
         if (this->FrameTime >= FrameDuration && this->MaxFrames > 1) {
             this->Frame = (this->Frame + 1) % MaxFrames;

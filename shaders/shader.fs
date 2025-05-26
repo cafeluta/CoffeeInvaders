@@ -20,9 +20,12 @@ void main()
     vec2 animTexCoords;
     animTexCoords.x = (col + TexCoords.x) * frameSize;
     animTexCoords.y = (row + TexCoords.y) * frameSize;
-    // simple sprites
-    vec4 texColor = texture(image, TexCoords);
-    vec4 breakColor = texture(breakTexture, TexCoords);
+
+    // animTexCoords for animated sprites
+    vec4 texColor = texture(image, animTexCoords);
+    vec4 breakColor = texture(breakTexture, animTexCoords);
+
+    // break texture / simple sprite
     vec4 blended = mix(texColor, breakColor, breakAmount);
     FragColor = vec4(spriteColor, 1.0) * blended;
 }

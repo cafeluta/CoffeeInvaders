@@ -55,6 +55,12 @@ void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec
     this->shader.setMatrix4("model", model);
     this->shader.setVector3f("spriteColor", color);
 
+    // no animation uniform variables
+    shader.setFloat("frame", 0.0f);
+    shader.setFloat("framesPerRow", 1.0f);
+    shader.setFloat("frameSize", 1.0f);
+    shader.setFloat("frameRows", 1.0f);
+
     // activating the texture we want to use for this sprite
     glActiveTexture(GL_TEXTURE0);
     texture.bind();

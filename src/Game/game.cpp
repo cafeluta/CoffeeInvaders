@@ -85,7 +85,7 @@ void Game::update(float dt) {
     for (auto& p : Particles)
         p.update(dt);
     Particles.erase(
-        std::remove_if(Particles.begin(), Particles.end(), [](const Particle& p){ return p.Life <= 0.0f; }),
+        std::remove_if(Particles.begin(), Particles.end(), [this](const Particle& p){ return p.Position.y >= this->Height - p.Size.y; }),
         Particles.end()
     );
 }
@@ -184,8 +184,9 @@ void Game::doCollisions() {
                         for (int i = 0; i < 8; ++i) {
                             glm::vec2 partPos = box.Position + glm::vec2(rand() % (int)box.Size.x, rand() % (int)box.Size.y);
                             glm::vec2 partVel = glm::vec2((rand()%20-10)/10.0f, 60.0f + rand()%40); // random X, rapid pe Y
-                            glm::vec3 color = glm::vec3(0.7f, 0.5f, 0.2f); // sau orice culoare vrei
-                            Particles.emplace_back(partPos, glm::vec2(12,12), *ParticleTexture, color, partVel, 0.7f, maxFrames, frameDuration);
+                            glm::vec3 color = glm::vec3(0.7f, 0.5f, 0.2f); // color
+                            Particles.emplace_back(partPos, glm::vec2(128,128), *ParticleTexture, color, partVel, 0.7f, maxFrames, frameDuration);
+                                                            // size
                         }
 
 
