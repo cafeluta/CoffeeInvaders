@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <GLFW/glfw3.h>
+#include <cstdlib>
 
 SpriteRenderer* Renderer;
 GameObject* Player;
@@ -84,10 +85,7 @@ void Game::update(float dt) {
 
     for (auto& p : Particles)
         p.update(dt);
-    Particles.erase(
-        std::remove_if(Particles.begin(), Particles.end(), [this](const Particle& p){ return p.Position.y >= this->Height - p.Size.y; }),
-        Particles.end()
-    );
+    this->removeParticles();
 }
 
 void Game::processInput(float dt) {
@@ -168,6 +166,15 @@ void Game::removeDestroyedBricks() {
     );
 }
 
+void Game::removeParticles() {
+    Particles.erase(
+        std::remove_if(Particles.begin(), Particles.end(),
+            [this](const Particle& p) {
+                return p.Position.y >= this->Height - p.Size.y;}),
+        Particles.end()
+    );
+}
+
 void Game::doCollisions() {
     for (GameObject &box : this->Levels[this->Level].Bricks){  // every block
         if (!box.IsDestroyed){  // if the block isn't destroyed
@@ -179,16 +186,18 @@ void Game::doCollisions() {
                         bean.HP--;
 
                         // draw particles
-                        int maxFrames = 7;
-                        float frameDuration = 0.07f;
-                        for (int i = 0; i < 8; ++i) {
-                            glm::vec2 partPos = box.Position + glm::vec2(rand() % (int)box.Size.x, rand() % (int)box.Size.y);
-                            glm::vec2 partVel = glm::vec2((rand()%20-10)/10.0f, 60.0f + rand()%40); // random X, rapid pe Y
-                            glm::vec3 color = glm::vec3(0.7f, 0.5f, 0.2f); // color
-                            Particles.emplace_back(partPos, glm::vec2(128,128), *ParticleTexture, color, partVel, 0.7f, maxFrames, frameDuration);
-                                                            // size
+                        // random chance on hit for particles to appear
+                        if (checkForParticleDropChance()) {  // 40% chance
+                            int maxFrames = 7;
+                            float frameDuration = 0.07f;
+                            for (int i = 0; i < 8; ++i) {
+                                glm::vec2 partPos = box.Position + glm::vec2(rand() % (int)box.Size.x, rand() % (int)box.Size.y);
+                                glm::vec2 partVel = glm::vec2((rand()%20-10)/10.0f, 60.0f + rand()%40); // random X, rapid pe Y
+                                glm::vec3 color = glm::vec3(0.7f, 0.5f, 0.2f); // color
+                                Particles.emplace_back(partPos, glm::vec2(128,128), *ParticleTexture, color, partVel, 0.7f, maxFrames, frameDuration);
+                                                                // size
+                            }
                         }
-
 
                         // delete the box if it has no more hp
                         if (box.HP <= 0) {
@@ -199,6 +208,10 @@ void Game::doCollisions() {
             }
         }
     }       
+}
+
+bool Game::checkForParticleDropChance() {
+    return rand() % 100 <= PARTICLE_DROP_CHANCE;
 }
 
 void Game::shutdown() {

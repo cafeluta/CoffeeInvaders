@@ -18,6 +18,9 @@ const float PROJECTILE_SPEED = -400.0f;
 const glm::vec2 INITIAL_PROJECTILE_VELOCITY(100.0f, -100.0f);
 const float SHOOT_COOLDOWN = 0.5f;
 
+// PARTICLES
+const float PARTICLE_DROP_CHANCE = 40.0f;  // 40% chance
+
 // TEXTURES
 const char* const TEXTURE_FACE = "assets/awesomeface.png";
 const char* const TEXTURE_BACKGROUND = "assets/background01.png";

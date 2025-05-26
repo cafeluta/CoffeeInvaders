@@ -47,6 +47,10 @@ public:
     // collisions
     void doCollisions();
 
+    // particles
+    bool checkForParticleDropChance();
+    void removeParticles();
+
     void shutdown();
 };
 
