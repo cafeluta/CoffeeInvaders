@@ -71,9 +71,15 @@ void GameLevel::init(std::vector<std::vector<GLuint>> tileData, GLuint levelWidt
 }
 
 void GameLevel::draw(SpriteRenderer &renderer) {
-    for (GameObject &tile : this->Bricks)
-        if (!tile.IsDestroyed)
-            tile.draw(renderer);
+    for (GameObject &tile : this->Bricks) {
+        if (!tile.IsDestroyed) {
+            float breakAmount = 0.0f;
+            if (!tile.IsSolid && tile.HP > 0 && tile.MaxHp > 0) {
+                breakAmount = 1.0f - (float)tile.HP / (float)tile.MaxHp;
+            }
+            tile.draw(renderer, breakAmount);
+        }
+    }
 }
 
 bool GameLevel::isCompleted() {

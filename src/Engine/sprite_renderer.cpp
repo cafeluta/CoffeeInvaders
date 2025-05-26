@@ -1,4 +1,5 @@
 #include "../../include/Engine/sprite_renderer.h"
+#include "../../include/Engine/resource_manager.h"
 
 SpriteRenderer::SpriteRenderer(Shader &shader)
 {
@@ -38,18 +39,16 @@ void SpriteRenderer::initRenderData() {
     glBindVertexArray(0);
 }
 
-void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color) {
+void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color, float breakAmount) {
+    // break block code
+    this->shader.use();
+    this->shader.setFloat("breakAmount", breakAmount);
+    
     // preparing the shader
     this->shader.use();
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(position, 0.0f));  // puts the sprite in te right pos
-
-    // rotating the sprite around its center
-    // model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));  // temporarily going to the center of the sprite
-    // model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
-    // model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));  // going back
-
     model = glm::scale(model, glm::vec3(size, 1.0f));
 
     // updating uniforms
@@ -59,9 +58,18 @@ void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec
     // activating the texture we want to use for this sprite
     glActiveTexture(GL_TEXTURE0);
     texture.bind();
+    this->shader.setInteger("image", 0);
+    
+    // block texture
+    glActiveTexture(GL_TEXTURE1);
+    ResourceManager::getTexture2D("break_block").bind();
+    this->shader.setInteger("breakTexture", 1);
 
     // OpenGl now knows to map the triangles based on the given vertices in initRenderData to the given texture
     glBindVertexArray(this->quadVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
+
+    // reset to texture 0 (the sprite)
+    glActiveTexture(GL_TEXTURE0);
 }
