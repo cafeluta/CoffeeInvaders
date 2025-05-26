@@ -75,7 +75,8 @@ void GameLevel::draw(SpriteRenderer &renderer) {
         if (!tile.IsDestroyed) {
             float breakAmount = 0.0f;
             if (!tile.IsSolid && tile.HP > 0 && tile.MaxHp > 0) {
-                breakAmount = 1.0f - (float)tile.HP / (float)tile.MaxHp;
+                breakAmount = 1.0f - (float)tile.HP / (float)tile.MaxHp > 0.21f
+                                ? 0.21f : 1.0f - (float)tile.HP / (float)tile.MaxHp;
             }
             tile.draw(renderer, breakAmount);
         }
