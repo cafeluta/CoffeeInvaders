@@ -4,7 +4,7 @@
 #include "game_object.h"
 #include "projectile_object.h"
 
-// bool checkCollision(GameObject &one, GameObject &two);  // AABB
-bool checkCollision(ProjectileObject &one, GameObject &two);
+bool checkCollision2GameObjects(GameObject &one, GameObject &two);  // AABB
+bool checkCollisionProjGameObject(ProjectileObject &one, GameObject &two);
 
 #endif

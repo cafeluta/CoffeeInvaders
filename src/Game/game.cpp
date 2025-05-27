@@ -10,7 +10,7 @@
 #include <cstdlib>
 
 SpriteRenderer* Renderer;
-GameObject* Player;
+ProjectileObject* Player;
 
 std::vector<ProjectileObject> Beans;
 float lastShotTime = 0.0f;
@@ -65,7 +65,7 @@ void Game::init() {
         this->Width / 2.0f - PLAYER_SIZE.x / 2.0f,
         this->Height - PLAYER_SIZE.y
     );
-    Player = new GameObject(playerPosition, PLAYER_SIZE, ResourceManager::getTexture2D("spaceship"));
+    Player = new ProjectileObject(playerPosition, 24.0f, glm::vec2(0.0f, 0.0f),  ResourceManager::getTexture2D("spaceship"));
 
     // bean
     this->KeysProcessed[GLFW_KEY_SPACE] = false;
@@ -170,16 +170,17 @@ void Game::removeParticles() {
     Particles.erase(
         std::remove_if(Particles.begin(), Particles.end(),
             [this](const Particle& p) {
-                return p.Position.y >= this->Height - p.Size.y;}),
+                return (p.Position.y >= this->Height - p.Size.y) || (p.IsDestroyed);}),
         Particles.end()
     );
 }
 
 void Game::doCollisions() {
+    // blocks collision with beans
     for (GameObject &box : this->Levels[this->Level].Bricks){  // every block
         if (!box.IsDestroyed){  // if the block isn't destroyed
             for (ProjectileObject &bean : Beans) {  // we test every bean that interacts with the blocks
-                if (checkCollision(bean, box)) {
+                if (checkCollisionProjGameObject(bean, box)) {
                     if (!box.IsSolid) { // test if the block is undestructable
                         // take out hp on each hit
                         box.HP--;
@@ -189,12 +190,12 @@ void Game::doCollisions() {
                         // random chance on hit for particles to appear
                         if (checkForParticleDropChance()) {  // 40% chance
                             int maxFrames = 7;
-                            float frameDuration = 0.07f;
+                            float frameDuration = 0.20f;
                             for (int i = 0; i < 8; ++i) {
                                 glm::vec2 partPos = box.Position + glm::vec2(rand() % (int)box.Size.x, rand() % (int)box.Size.y);
                                 glm::vec2 partVel = glm::vec2((rand()%20-10)/10.0f, 60.0f + rand()%40); // random X, rapid pe Y
                                 glm::vec3 color = glm::vec3(0.7f, 0.5f, 0.2f); // color
-                                Particles.emplace_back(partPos, glm::vec2(128,128), *ParticleTexture, color, partVel, 0.7f, maxFrames, frameDuration);
+                                Particles.emplace_back(partPos, glm::vec2(32,32), *ParticleTexture, color, partVel, 0.7f, maxFrames, frameDuration);
                                                                 // size
                             }
                         }
@@ -207,7 +208,15 @@ void Game::doCollisions() {
                 }
             }
         }
-    }       
+    }
+
+    // particles collision with player
+    for (Particle &p : Particles) {
+        if (checkCollisionProjGameObject(*Player, p)) {
+            p.IsDestroyed = true;
+            printf("Player hit!\n");
+        }
+    }
 }
 
 bool Game::checkForParticleDropChance() {

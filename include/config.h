@@ -29,7 +29,7 @@ const char* const TEXTURE_BLOCK_SOLID = "assets/coffee_block_solid01.png";
 const char* const TEXTURE_SPACESHIP = "assets/spaceship01.png";
 const char* const TEXTURE_COFFEE_BEAN = "assets/coffee_bean01.png";
 const char* const TEXTURE_BREAK = "assets/break_block01.png";
-const char* const TEXTURE_PARTICLE_SHEET = "assets/particle_sheet01.png";
+const char* const TEXTURE_PARTICLE_SHEET = "assets/particle_sheet02.png";
 
 // SHADERS
 const char* const SHADER_VERTEX = "shaders/shader.vs";

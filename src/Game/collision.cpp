@@ -1,16 +1,16 @@
 #include "../../include/Game/collision.h"
 
-// bool checkColision(GameObject &one, GameObject &two) {  // AABB
-//     glm::vec2 posOne = one.Position;
-//     glm::vec2 posTwo = two.Position;
+bool checkCollision2GameObjects(GameObject &one, GameObject &two) {  // AABB
+    glm::vec2 posOne = one.Position;
+    glm::vec2 posTwo = two.Position;
     
-//     bool collisionX = posOne.x <= posTwo.x + two.Size.y && posTwo.x <= posOne.x + one.Size.x;
-//     bool colllisionY = posOne.y <= posTwo.y + two.Size.y && posTwo.y <= posOne.y + one.Size.y;
+    bool collisionX = posOne.x <= posTwo.x + two.Size.y && posTwo.x <= posOne.x + one.Size.x;
+    bool colllisionY = posOne.y <= posTwo.y + two.Size.y && posTwo.y <= posOne.y + one.Size.y;
 
-//     return collisionX && colllisionY;
-// }
+    return collisionX && colllisionY;
+}
 
-bool checkCollision(ProjectileObject &one, GameObject &two){  // Circle Collision
+bool checkCollisionProjGameObject(ProjectileObject &one, GameObject &two){  // Circle Collision
     glm::vec2 center(one.Position + one.Radius);
     // calculate AABB info (center, half-extents)
     glm::vec2 aabb_half_extents(two.Size.x / 2.0f, two.Size.y / 2.0f);
