@@ -51,6 +51,8 @@ public:
     bool checkForParticleDropChance();
     void removeParticles();
 
+    // check if level has ended
+    bool checkIfLevelIsCompleted();
     void shutdown();
 };
 

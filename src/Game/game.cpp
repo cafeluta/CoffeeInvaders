@@ -46,9 +46,11 @@ void Game::init() {
 
     // load the levels
     GameLevel one; one.load(LEVEL_ONE, this->Width, this->Height / 2);
+    GameLevel two; two.load(LEVEL_TWO, this->Width, this->Height / 2);
     // add more later
 
     this->Levels.push_back(one);
+    this->Levels.push_back(two);
     this->Level = 0;
 
     glm::mat4 projection = glm::ortho(0.0f, (float)(this->Width), (float)(this->Height), 0.0f, -1.0f, 1.0f);  // we normalize the coords
@@ -86,6 +88,17 @@ void Game::update(float dt) {
     for (auto& p : Particles)
         p.update(dt);
     this->removeParticles();
+
+    if (this->checkIfLevelIsCompleted()) {
+        if (this->Level + 1 < this->Levels.size()) {
+            this->Level++;
+            Beans.clear();
+            Particles.clear();
+            Player->Position = glm::vec2(this->Width / 2.0f - Player->Size.x / 2.0f, this->Height - Player->Size.y );
+        } else {
+            this->State = GAME_WIN;
+        }
+    }
 }
 
 void Game::processInput(float dt) {
@@ -223,6 +236,15 @@ bool Game::checkForParticleDropChance() {
     return rand() % 100 <= PARTICLE_DROP_CHANCE;
 }
 
+bool Game::checkIfLevelIsCompleted() {
+    for (auto& brick : this->Levels[this->Level].Bricks)
+        if (!brick.IsSolid && !brick.IsDestroyed)
+            return false;
+    return true;
+}
+
 void Game::shutdown() {
     delete Renderer;
 }
+
+// TODO implement ricocheting beans with random direction

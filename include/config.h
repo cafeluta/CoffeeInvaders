@@ -37,6 +37,7 @@ const char* const SHADER_FRAGMENT = "shaders/shader.fs";
 
 // LEVELS
 const char* const LEVEL_ONE = "levels/one.lvl";
+const char* const LEVEL_TWO = "levels/two.lvl";
 
 // COLORS
 const glm::vec3 COLOR_WHITE(1.0f);
