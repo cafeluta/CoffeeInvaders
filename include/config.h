@@ -17,6 +17,7 @@ const float PROJECTILE_RADIUS = 9.5f;
 const float PROJECTILE_SPEED = -400.0f;
 const glm::vec2 INITIAL_PROJECTILE_VELOCITY(100.0f, -100.0f);
 const float SHOOT_COOLDOWN = 0.5f;
+const int SHOT_MAXIMUM_XVELOCITY = 75.0f;
 
 // PARTICLES
 const float PARTICLE_DROP_CHANCE = 40.0f;  // 40% chance

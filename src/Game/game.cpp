@@ -92,10 +92,13 @@ void Game::update(float dt) {
     if (this->checkIfLevelIsCompleted()) {
         if (this->Level + 1 < this->Levels.size()) {
             this->Level++;
+
+            // reset game objects
             Beans.clear();
             Particles.clear();
             Player->Position = glm::vec2(this->Width / 2.0f - Player->Size.x / 2.0f, this->Height - Player->Size.y );
         } else {
+            // TODO !! update game state still no case for this one but will implement it later
             this->State = GAME_WIN;
         }
     }
@@ -127,8 +130,14 @@ void Game::processInput(float dt) {
         if (this->Keys[GLFW_KEY_SPACE] && currentTime - lastShotTime >= SHOOT_COOLDOWN){
             this->KeysProcessed[GLFW_KEY_SPACE] = true;
 
+            // the bean can go in a cone like direction from the spaceship
+            // let's say SHOT_MAXIMUM_XVELOCITY px left/right
+            int rand_x = rand() % (SHOT_MAXIMUM_XVELOCITY * 2 + 1);
+            float x_velocity = (float) rand_x - SHOT_MAXIMUM_XVELOCITY;
+
             glm::vec2 beanPos = Player->Position + glm::vec2(Player->Size.x / 2.0f - PROJECTILE_RADIUS, -PROJECTILE_RADIUS * 2.0f);
-            glm::vec2 beanVelocity(Player->Velocity.x * 0.5f, PROJECTILE_SPEED);  // player velocity is set temporarily to 0.0f maybe in the future we can rotate the spaceship so we modify it (maybe)
+            // player velocity is set temporarily to 0.0f maybe in the future we can rotate the spaceship so we modify it (maybe)
+            glm::vec2 beanVelocity(x_velocity, PROJECTILE_SPEED);
             ProjectileObject newBean(beanPos, PROJECTILE_RADIUS, beanVelocity, ResourceManager::getTexture2D("bean"));
             newBean.Stuck = false;
             Beans.push_back(newBean);
@@ -216,6 +225,16 @@ void Game::doCollisions() {
                         // delete the box if it has no more hp
                         if (box.HP <= 0) {
                             box.IsDestroyed = true;
+                        }
+                    } else {  // block is undestructable
+                        // ricochete beans
+                        bean.Velocity.y = -bean.Velocity.y;
+
+                        // move the bean a bit above or a a bit below the block
+                        if (bean.Velocity.y > 0) {
+                            bean.Position.y = bean.Position.y + bean.Size.y + 0.1f;
+                        } else {
+                            bean.Position.y = bean.Position.y - bean.Size.y - 0.1f;
                         }
                     }
                 }
