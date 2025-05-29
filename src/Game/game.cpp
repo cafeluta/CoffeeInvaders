@@ -107,21 +107,38 @@ void Game::update(float dt) {
 void Game::processInput(float dt) {
     if (this->State == GAME_ACTIVE) {
         float velocity = PLAYER_VELOCITY * dt;
+        glm::vec2 oldPosition = Player->Position;
         if (this->Keys[GLFW_KEY_D]) {
-            if (Player->Position.x  + velocity <= this->Width - Player->Size.x)
+            if (Player->Position.x  + velocity <= this->Width - Player->Size.x) {
                 Player->Position.x += velocity;
+
+                if (checkCollisionPlayerBlock())
+                    Player->Position = oldPosition;
+            }
         }
         if (this->Keys[GLFW_KEY_A]) {
-            if (Player->Position.x - velocity >= 0.0f)
+            if (Player->Position.x - velocity >= 0.0f) {
                 Player->Position.x -= velocity;
+
+                if (checkCollisionPlayerBlock())
+                    Player->Position = oldPosition;
+            }
         }
         if (this->Keys[GLFW_KEY_W]) {
-            if (Player->Position.y - velocity >= 0.0f)
+            if (Player->Position.y - velocity >= 0.0f) {
                 Player->Position.y -= velocity;
+
+                if (checkCollisionPlayerBlock())
+                    Player->Position = oldPosition;
+            }
         }
         if (this->Keys[GLFW_KEY_S]) {
-            if (Player->Position.y + velocity <= this->Height - Player->Size.y)
+            if (Player->Position.y + velocity <= this->Height - Player->Size.y) {
                 Player->Position.y += velocity;
+
+                if (checkCollisionPlayerBlock())
+                    Player->Position = oldPosition;
+            }
         }
 
         // don't shoot like a machine gun please!
@@ -240,6 +257,7 @@ void Game::doCollisions() {
                 }
             }
         }
+
     }
 
     // particles collision with player
@@ -260,6 +278,14 @@ bool Game::checkIfLevelIsCompleted() {
         if (!brick.IsSolid && !brick.IsDestroyed)
             return false;
     return true;
+}
+
+bool Game::checkCollisionPlayerBlock() {
+    for (auto& box : this->Levels[this->Level].Bricks) {
+        if (checkCollisionProjGameObject(*Player, box))
+            return true;
+    }
+    return false;
 }
 
 void Game::shutdown() {

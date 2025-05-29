@@ -53,6 +53,10 @@ public:
 
     // check if level has ended
     bool checkIfLevelIsCompleted();
+
+    // the player can't go through blocks!!
+    bool checkCollisionPlayerBlock();
+
     void shutdown();
 };
 
