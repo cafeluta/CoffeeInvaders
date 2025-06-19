@@ -11,6 +11,8 @@ const unsigned int SCR_HEIGHT = 600;
 // PLAYER
 const float PLAYER_VELOCITY = 300.0f;
 const glm::vec2 PLAYER_SIZE(64.0f, 64.0f);
+const float ROTATE_SPEED = 90.0f;  // grades/second
+const float MAX_ROTATE = 50.0f;  // maximum angle permitted for rotation
 
 // PROJECTILE COFFEE BEAN
 const float PROJECTILE_RADIUS = 9.5f;

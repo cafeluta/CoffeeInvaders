@@ -48,8 +48,11 @@ void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec
     this->shader.use();
 
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(position, 0.0f));  // puts the sprite in te right pos
-    model = glm::scale(model, glm::vec3(size, 1.0f));
+    model = glm::translate(model, glm::vec3(position, 0.0f));
+    model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));  // translate to center of sprite
+    model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));  // rotate around center
+    model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));  // translate back to original position
+    model = glm::scale(model, glm::vec3(size, 1.0f));  // scale to the size of the sprite
 
     // updating uniforms
     this->shader.setMatrix4("model", model);

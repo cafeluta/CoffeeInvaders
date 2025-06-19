@@ -10,6 +10,6 @@ GameObject::GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec
     
 }
 
-void GameObject::draw(SpriteRenderer &renderer, float breakAmount) {
-    renderer.drawSprite(this->Sprite, this->Position, this->Size, this->Rotation, this->Color, breakAmount);
+void GameObject::draw(SpriteRenderer &renderer, float breakAmount, float customRotation) {
+    renderer.drawSprite(this->Sprite, this->Position, this->Size, customRotation, this->Color, breakAmount);
 }

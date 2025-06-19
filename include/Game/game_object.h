@@ -22,7 +22,7 @@ public:
     GameObject();  // empty constructor
     GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color = glm::vec3(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f), int hp = -1);  // personalized constructor
 
-    virtual void draw(SpriteRenderer &renderer, float breakAmount = 0.0f);  // virtual void so we can override this function in other classes
+    virtual void draw(SpriteRenderer &renderer, float breakAmount = 0.0f, float customRotation = 0.0f);  // virtual void so we can override this function in other classes
 };
 
 #endif

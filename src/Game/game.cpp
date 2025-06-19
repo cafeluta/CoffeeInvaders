@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <GLFW/glfw3.h>
 #include <cstdlib>
+#include <iostream>
 
 SpriteRenderer* Renderer;
 ProjectileObject* Player;
@@ -161,6 +162,22 @@ void Game::processInput(float dt) {
 
             lastShotTime = currentTime;
         }
+
+        // spaceship rotation
+        if (this->Keys[GLFW_KEY_LEFT]) {
+            Player->Rotation -= ROTATE_SPEED * dt;
+            if (Player->Rotation < -MAX_ROTATE)
+                Player->Rotation = -MAX_ROTATE;
+        }
+        if (this->Keys[GLFW_KEY_RIGHT]) {
+            Player->Rotation += ROTATE_SPEED * dt;
+            if (Player->Rotation > MAX_ROTATE)
+                Player->Rotation = MAX_ROTATE;
+        }
+        // reset rotation on arrow key up
+        if (this->Keys[GLFW_KEY_UP]) {
+            Player->Rotation = 0.0f;
+        }
     }
 }
 
@@ -173,7 +190,9 @@ void Game::render() {
         this->Levels[this->Level].draw(*Renderer);
 
         // render the spaceship sprite
-        Player->draw(*Renderer);
+        float angle = glm::radians(Player->Rotation);  // convert to radians
+        std::cout << angle << std::endl;
+        Player->draw(*Renderer, 0.0f, Player->Rotation);
 
         // render multiple beans
         for (ProjectileObject &bean : Beans)
@@ -292,4 +311,4 @@ void Game::shutdown() {
     delete Renderer;
 }
 
-// TODO implement ricocheting beans with random direction
+// TODO implement the rotation of the spaceship on arrow keys
