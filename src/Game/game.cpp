@@ -145,23 +145,32 @@ void Game::processInput(float dt) {
         // don't shoot like a machine gun please!
         float currentTime = glfwGetTime();
 
-        if (this->Keys[GLFW_KEY_SPACE] && currentTime - lastShotTime >= SHOOT_COOLDOWN){
+        if (this->Keys[GLFW_KEY_SPACE] && currentTime - lastShotTime >= SHOOT_COOLDOWN) {
             this->KeysProcessed[GLFW_KEY_SPACE] = true;
 
-            // the bean can go in a cone like direction from the spaceship
-            // let's say SHOT_MAXIMUM_XVELOCITY px left/right
-            int rand_x = rand() % (SHOT_MAXIMUM_XVELOCITY * 2 + 1);
-            float x_velocity = (float) rand_x - SHOT_MAXIMUM_XVELOCITY;
+            // the angle is adjusted +90.0f cuz i'm lazy to modify the logic of the rotation now
+            // the spaceship in centered with the fron on 0degrees left is <0 and right is > 0
+            float baseAngle = glm::radians(Player->Rotation + 90.0f);  
 
-            glm::vec2 beanPos = Player->Position + glm::vec2(Player->Size.x / 2.0f - PROJECTILE_RADIUS, -PROJECTILE_RADIUS * 2.0f);
-            // player velocity is set temporarily to 0.0f maybe in the future we can rotate the spaceship so we modify it (maybe)
-            glm::vec2 beanVelocity(x_velocity, PROJECTILE_SPEED);
+            // 10degrees variation
+            float angleOffset = ((float)(rand() % 1001) / 1000.0f) * 2.0f * MAX_OFFSET_DEGREES - MAX_OFFSET_DEGREES;
+            float finalAngle = baseAngle + glm::radians(angleOffset);
+
+            glm::vec2 direction(cos(finalAngle), sin(finalAngle));
+            direction = glm::normalize(direction);
+
+            // updated position so the bean spawns from the front of the ship
+            glm::vec2 beanPos = Player->Position + Player->Size * 0.5f - glm::vec2(PROJECTILE_RADIUS);
+            
+            glm::vec2 beanVelocity = direction * PROJECTILE_SPEED;
+
             ProjectileObject newBean(beanPos, PROJECTILE_RADIUS, beanVelocity, ResourceManager::getTexture2D("bean"));
             newBean.Stuck = false;
             Beans.push_back(newBean);
 
             lastShotTime = currentTime;
         }
+
 
         // spaceship rotation
         if (this->Keys[GLFW_KEY_LEFT]) {
@@ -191,7 +200,6 @@ void Game::render() {
 
         // render the spaceship sprite
         float angle = glm::radians(Player->Rotation);  // convert to radians
-        std::cout << angle << std::endl;
         Player->draw(*Renderer, 0.0f, Player->Rotation);
 
         // render multiple beans

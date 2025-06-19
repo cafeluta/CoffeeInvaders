@@ -20,6 +20,7 @@ const float PROJECTILE_SPEED = -400.0f;
 const glm::vec2 INITIAL_PROJECTILE_VELOCITY(100.0f, -100.0f);
 const float SHOOT_COOLDOWN = 0.5f;
 const int SHOT_MAXIMUM_XVELOCITY = 75.0f;
+const float MAX_OFFSET_DEGREES = 10.0f;  // beans go in a cone of 20degres
 
 // PARTICLES
 const float PARTICLE_DROP_CHANCE = 40.0f;  // 40% chance
