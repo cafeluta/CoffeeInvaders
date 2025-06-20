@@ -92,12 +92,13 @@ void Game::update(float dt) {
 
     if (this->checkIfLevelIsCompleted()) {
         if (this->Level + 1 < this->Levels.size()) {
-            this->Level++;
+            // this->Level++;
+            this->State = GAME_TRANSITION;  // continue screen
 
             // reset game objects
-            Beans.clear();
-            Particles.clear();
-            Player->Position = glm::vec2(this->Width / 2.0f - Player->Size.x / 2.0f, this->Height - Player->Size.y );
+            // Beans.clear();
+            // Particles.clear();
+            // Player->Position = glm::vec2(this->Width / 2.0f - Player->Size.x / 2.0f, this->Height - Player->Size.y );
         } else {
             // TODO !! update game state still no case for this one but will implement it later
             this->State = GAME_WIN;
@@ -188,6 +189,23 @@ void Game::processInput(float dt) {
             Player->Rotation = 0.0f;
         }
     }
+
+    if (this->State == GAME_TRANSITION) {
+        if (this->Keys[GLFW_KEY_ENTER] && !this->KeysProcessed[GLFW_KEY_ENTER]) {
+            // update the enter key
+            this->KeysProcessed[GLFW_KEY_ENTER] = true;
+
+            // load new level
+            this->Level++;
+
+            // reset level entities
+            Beans.clear();
+            Particles.clear();
+            Player->Position = glm::vec2(this->Width / 2.0f - Player->Size.x / 2.0f, this->Height - Player->Size.y );
+            this->State = GAME_ACTIVE;
+        }
+        return;
+    }
 }
 
 void Game::render() {
@@ -210,6 +228,13 @@ void Game::render() {
         for (Particle& p : Particles) {
             Renderer->drawSpriteAnim(p.Sprite, p.Position, p.Size, p.Rotation, p.Color, p.Frame, p.MaxFrames);
         }
+    }
+    
+    if (this->State == GAME_TRANSITION) {
+        Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(SCR_WIDTH, SCR_HEIGHT), 0.0f, COLOR_WHITE);
+
+        // draw text later
+        return;
     }
 }
 
