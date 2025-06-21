@@ -23,6 +23,7 @@ public:
     static Texture2D loadTexture2D(const char* file, bool alpha, std::string name);  // alpha = transparency 
     static Texture2D& getTexture2D(std::string name);
 
+    // add text renderer
     // memory free
     static void clear();
 private:
