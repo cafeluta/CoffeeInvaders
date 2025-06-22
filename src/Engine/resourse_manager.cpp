@@ -7,8 +7,9 @@
 #include "../../lib/stb_image.h"
 
 // initializing storage
-std::map<std::string, Shader>       ResourceManager::Shaders;
 std::map<std::string, Texture2D>    ResourceManager::Textures;
+std::map<std::string, Shader>       ResourceManager::Shaders;
+std::map<std::string, Text> ResourceManager::Texts;  // fml * 2
 
 Shader ResourceManager::loadShader(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile, std::string name) {
     Shaders[name] = loadShaderFromFile(vertexShaderFile, fragmentShaderFile, geometryShaderFile);
@@ -26,6 +27,15 @@ Texture2D ResourceManager::loadTexture2D(const char* file, bool alpha, std::stri
 
 Texture2D& ResourceManager::getTexture2D(std::string name) {
     return Textures[name];
+}
+
+Text ResourceManager::loadText(GLuint width, GLuint height, std::string name) {
+    Texts[name] = Text(width, height);
+    return Texts[name];
+}
+
+Text& ResourceManager::getText(std::string name) {
+    return Texts[name];
 }
 
 void ResourceManager::clear(){

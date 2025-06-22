@@ -8,12 +8,14 @@
 
 #include "texture.h"
 #include "shader.h"
+#include "text.h"
 
 class ResourceManager {
 public:
     // storage
-    static std::map<std::string, Shader> Shaders;
     static std::map<std::string, Texture2D> Textures;
+    static std::map<std::string, Shader> Shaders;
+    static std::map<std::string, Text> Texts;
 
     // shader
     static Shader loadShader(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile, std::string name);
@@ -24,6 +26,9 @@ public:
     static Texture2D& getTexture2D(std::string name);
 
     // add text renderer
+    static Text& getText(std::string name);
+    static Text loadText(GLuint width, GLuint height, std::string name);
+
     // memory free
     static void clear();
 private:
