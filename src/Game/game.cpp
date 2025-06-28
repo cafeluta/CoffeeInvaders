@@ -27,6 +27,14 @@ Game::Game(GLuint width, GLuint height)
 void Game::init() {
     // load shaders
     ResourceManager::loadShader(SHADER_VERTEX, SHADER_FRAGMENT, nullptr, "sprite");
+    ResourceManager::loadShader(TEXT_VERTEX, TEXT_FRAGMENT, nullptr, "text_shader");
+    Shader& textShader = ResourceManager::getShader("text_shader");
+    glm::mat4 projection = glm::ortho(0.0f, (float)SCR_WIDTH, (float)SCR_HEIGHT, 0.0f, -1.0f, 1.0f);
+    textShader.use();
+    textShader.setMatrix4("projection", projection);
+    textShader.setInteger("text", 0);
+    // Shader& s = ResourceManager::getShader("text_shader");
+    // std::cout << "Text shader ID = " << s.id << std::endl;
 
     // load the player texture
     ResourceManager::loadTexture2D(TEXTURE_SPACESHIP, true, "spaceship");
@@ -50,11 +58,14 @@ void Game::init() {
     GameLevel two; two.load(LEVEL_TWO, this->Width, this->Height / 2);
     // add more later
 
+    // load text
+    ResourceManager::loadText(SCR_WIDTH , SCR_HEIGHT, "default");
+
     this->Levels.push_back(one);
     this->Levels.push_back(two);
     this->Level = 0;
 
-    glm::mat4 projection = glm::ortho(0.0f, (float)(this->Width), (float)(this->Height), 0.0f, -1.0f, 1.0f);  // we normalize the coords
+    // projection = glm::ortho(0.0f, (float)(this->Width), 0.0f, (float)(this->Height), -1.0f, 1.0f);  // we normalize the coords
     
     // setting the image as the active texture
     ResourceManager::getShader("sprite").use().setInteger("image", 0);
@@ -75,6 +86,9 @@ void Game::init() {
 
     // particle
     ParticleTexture = &ResourceManager::getTexture2D("particle_sheet");
+
+    // debug purpose
+    this->State = GAME_TRANSITION;
 }
 
 void Game::update(float dt) {
@@ -210,6 +224,7 @@ void Game::processInput(float dt) {
 
 void Game::render() {
     if (this->State == GAME_ACTIVE) {
+        ResourceManager::getShader("sprite").use(); 
         // render the background
         Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(SCR_WIDTH, SCR_HEIGHT), 0.0f, COLOR_WHITE);
 
@@ -234,6 +249,13 @@ void Game::render() {
         Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(SCR_WIDTH, SCR_HEIGHT), 0.0f, COLOR_WHITE);
 
         // draw text later
+        ResourceManager::getShader("text_shader").use();
+
+        char congrats[100];
+        sprintf(congrats, "WP, Level %d Done!", this->Level + 1);
+        
+        ResourceManager::getText("default").render(ResourceManager::getShader("text_shader"), congrats, 220.0f, 200.0f, 1.0f, COLOR_WHITE);
+        ResourceManager::getText("default").render(ResourceManager::getShader("text_shader"), "PRESS ENTER TO CONTINUE", 150.0f, 300.0f, 0.8f, COLOR_WHITE);
         return;
     }
 }

@@ -1,15 +1,16 @@
 #include "../../include/Engine/resource_manager.h"
+#include "../../lib/stb_image.h"
+#include "../../include/config.h";
 
 #include <iostream>
 #include <sstream>
 #include <fstream>
-
-#include "../../lib/stb_image.h"
+#include <memory>
 
 // initializing storage
 std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
-std::map<std::string, Text> ResourceManager::Texts;  // fml * 2
+std::map<std::string, std::unique_ptr<Text>> ResourceManager::Texts;  // fml * 2
 
 Shader ResourceManager::loadShader(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile, std::string name) {
     Shaders[name] = loadShaderFromFile(vertexShaderFile, fragmentShaderFile, geometryShaderFile);
@@ -29,20 +30,27 @@ Texture2D& ResourceManager::getTexture2D(std::string name) {
     return Textures[name];
 }
 
-Text ResourceManager::loadText(GLuint width, GLuint height, std::string name) {
-    Texts[name] = Text(width, height);
-    return Texts[name];
+Text& ResourceManager::loadText(GLuint width, GLuint height, std::string name) {
+    auto text = std::make_unique<Text>();
+    if (!text->load(ARIAL_FONT, 48)) {
+        std::cerr << "Failed to load text renderer for font: " << ARIAL_FONT << std::endl;
+        throw std::runtime_error("Font load failed");
+    }
+    Text& ref = *text;
+    Texts[name] = std::move(text);
+    return ref;
 }
 
 Text& ResourceManager::getText(std::string name) {
-    return Texts[name];
+    return *Texts.at(name);
 }
-
 void ResourceManager::clear(){
     for (auto iter : Shaders)
         glDeleteProgram(iter.second.id);
     for (auto iter : Textures)
         glDeleteTextures(1, &iter.second.id);
+    for (auto& iter : Texts)
+        iter.second.reset();
 }
 
 

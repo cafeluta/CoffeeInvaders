@@ -38,12 +38,18 @@ const char* const TEXTURE_PARTICLE_SHEET = "assets/particle_sheet02.png";
 // SHADERS
 const char* const SHADER_VERTEX = "shaders/shader.vs";
 const char* const SHADER_FRAGMENT = "shaders/shader.fs";
+const char* const TEXT_VERTEX = "shaders/text.vs";
+const char* const TEXT_FRAGMENT = "shaders/text.fs";
 
 // LEVELS
 const char* const LEVEL_ONE = "levels/one.lvl";
 const char* const LEVEL_TWO = "levels/two.lvl";
 
+// FONT PATH
+const char* const ARIAL_FONT = "assets/fonts/arial.ttf";
+
 // COLORS
 const glm::vec3 COLOR_WHITE(1.0f);
+const glm::vec3 COLOR_BLACK(0.0f);
 
 #endif

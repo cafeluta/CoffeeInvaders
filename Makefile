@@ -1,6 +1,6 @@
 CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 -Iinclude -Ilib/glad/include
-LDFLAGS := -lGL -lglfw -ldl
+CXXFLAGS := -Wall -Wextra -std=c++17 -Iinclude -Ilib/glad/include -I/usr/include/freetype2
+LDFLAGS := -lGL -lglfw -ldl -lfreetype
 
 SRC_DIR := src
 OBJ_DIR := build

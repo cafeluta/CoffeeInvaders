@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <memory>
 
 #include <glad/glad.h>
 
@@ -15,7 +16,7 @@ public:
     // storage
     static std::map<std::string, Texture2D> Textures;
     static std::map<std::string, Shader> Shaders;
-    static std::map<std::string, Text> Texts;
+    static std::map<std::string, std::unique_ptr<Text>> Texts;
 
     // shader
     static Shader loadShader(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile, std::string name);
@@ -27,7 +28,7 @@ public:
 
     // add text renderer
     static Text& getText(std::string name);
-    static Text loadText(GLuint width, GLuint height, std::string name);
+    static Text& loadText(GLuint width, GLuint height, std::string name);
 
     // memory free
     static void clear();
