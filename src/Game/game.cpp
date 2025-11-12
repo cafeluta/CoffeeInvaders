@@ -87,6 +87,9 @@ void Game::init() {
     // particle
     ParticleTexture = &ResourceManager::getTexture2D("particle_sheet");
 
+    // DEBUG
+    this->State = GAME_WIN;
+
 }
 
 void Game::update(float dt) {
@@ -212,6 +215,23 @@ void Game::processInput(float dt) {
         }
         return;
     }
+
+    if (this->State == GAME_WIN) {
+        if (this->Keys[GLFW_KEY_ENTER] && !this->KeysProcessed[GLFW_KEY_ENTER]) {
+            // update the enter key
+            this->KeysProcessed[GLFW_KEY_ENTER] = true;
+
+            // load new level
+            this->Level = 0;
+
+            // reset level entities
+            Beans.clear();
+            Particles.clear();
+            Player->Position = glm::vec2(this->Width / 2.0f - Player->Size.x / 2.0f, this->Height - Player->Size.y );
+            this->State = GAME_ACTIVE;
+        }
+        return;
+    }
 }
 
 void Game::render() {
@@ -248,6 +268,20 @@ void Game::render() {
 
         ResourceManager::getText("default").render(ResourceManager::getShader("text_shader"), congrats, 220.0f, 200.0f, 1.0f, COLOR_WHITE);
         ResourceManager::getText("default").render(ResourceManager::getShader("text_shader"), "PRESS ENTER TO CONTINUE", 150.0f, 300.0f, 0.8f, COLOR_WHITE);
+        return;
+    }
+
+    if (this->State == GAME_WIN) {
+        Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(SCR_WIDTH, SCR_HEIGHT), 0.0f, COLOR_WHITE);
+
+        // Win text
+        ResourceManager::getShader("text_shader").use();
+
+        char finish[100];
+        sprintf(finish, "Congratulations! You finished the game!");
+
+        ResourceManager::getText("default").render(ResourceManager::getShader("text_shader"), finish, 10.0f, 200.0f, 0.9f, COLOR_WHITE);
+        ResourceManager::getText("default").render(ResourceManager::getShader("text_shader"), "PRESS ENTER TO RESTART", 170.0f, 300.0f, 0.7f, COLOR_WHITE);
         return;
     }
 }
