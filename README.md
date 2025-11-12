@@ -9,12 +9,13 @@ It mixes nostalgia from classic brick-breaker / invader games with a unique twis
 
 ## Table of Contents
 
-1. [About](#about)  
-2. [Features](#features)  
-3. [Gameplay](#gameplay)  
-4. [Installation & Build](#installation--build)  
-5. [Project Structure](#project-structure)  
-6. [Dependencies & Tech Stack](#dependencies--tech-stack)  
+- [☕ CoffeeInvaders](#-coffeeinvaders)
+  - [Table of Contents](#table-of-contents)
+  - [About](#about)
+  - [Features](#features)
+  - [Gameplay](#gameplay)
+  - [Installation \& Build](#installation--build)
+  - [Dependencies \& Tech Stack](#dependencies--tech-stack)
 
 
 ---
@@ -41,6 +42,8 @@ The goal: **clear all blocks in a level, collect as much coffee as possible, and
 
 ## Gameplay
 
+- **Game**: ./game
+
 - **Levels**: Each stage consists of a number of blocks that must be destroyed.  
 - **Blocks**: When hit, blocks may release **coffee drops** that can be collected for score and bonuses.  
 - **Objective**: Clear all blocks on the screen to complete the level.  
@@ -64,6 +67,7 @@ The goal: **clear all blocks in a level, collect as much coffee as possible, and
    cd CoffeeInvaders
 
 ## Project Structure
+```
 .
 ├── Makefile
 ├── README.md
@@ -95,7 +99,7 @@ The goal: **clear all blocks in a level, collect as much coffee as possible, and
     ├── Engine
     ├── Game
     └── stb_image.cpp
-
+```
 ## Dependencies & Tech Stack
 
 - **Language**: C / C++ (C11 recommended)
