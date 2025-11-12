@@ -35,7 +35,7 @@ The goal: **clear all blocks in a level, collect as much coffee as possible, and
 - Blocks that drop **coffee pickups** when destroyed  
 - Smooth 2D retro-style graphics and animations  
 - Power-ups hidden inside blocks  
-- Score system based on speed, precision, and coffee collected  
+- Score system based on speed, precision, and coffee collected  w
 - Catchy and energetic sound effects  
 
 ---

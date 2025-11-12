@@ -11,7 +11,7 @@
 void GameLevel::load(const char* file, GLuint levelWidth, GLuint levelHeight) {
     this->Bricks.clear();
     GLuint tileCode;
-    
+
     std::string buffer;  // used for reading lines from file
     std::ifstream fstream(file);  // stream of data from file
     std::vector<std::vector<GLuint>> tileData;  // matrix with tile codes
@@ -30,7 +30,7 @@ void GameLevel::load(const char* file, GLuint levelWidth, GLuint levelHeight) {
         if (tileData.size() > 0)
             this->init(tileData, levelWidth, levelHeight);
     } else {
-        std::cout << "| ERROR:: GameLevel file at: " << file << " doesn't exists!" 
+        std::cout << "| ERROR:: GameLevel file at: " << file << " doesn't exists!"
                 << "\n -- --------------------------------------------------- -- "
                 << std::endl;
     }

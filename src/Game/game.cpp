@@ -66,7 +66,7 @@ void Game::init() {
     this->Level = 0;
 
     // projection = glm::ortho(0.0f, (float)(this->Width), 0.0f, (float)(this->Height), -1.0f, 1.0f);  // we normalize the coords
-    
+
     // setting the image as the active texture
     ResourceManager::getShader("sprite").use().setInteger("image", 0);
     ResourceManager::getShader("sprite").setMatrix4("projection", projection);
@@ -87,8 +87,6 @@ void Game::init() {
     // particle
     ParticleTexture = &ResourceManager::getTexture2D("particle_sheet");
 
-    // debug purpose
-    this->State = GAME_TRANSITION;
 }
 
 void Game::update(float dt) {
@@ -106,13 +104,7 @@ void Game::update(float dt) {
 
     if (this->checkIfLevelIsCompleted()) {
         if (this->Level + 1 < this->Levels.size()) {
-            // this->Level++;
             this->State = GAME_TRANSITION;  // continue screen
-
-            // reset game objects
-            // Beans.clear();
-            // Particles.clear();
-            // Player->Position = glm::vec2(this->Width / 2.0f - Player->Size.x / 2.0f, this->Height - Player->Size.y );
         } else {
             // TODO !! update game state still no case for this one but will implement it later
             this->State = GAME_WIN;
@@ -165,7 +157,7 @@ void Game::processInput(float dt) {
 
             // the angle is adjusted +90.0f cuz i'm lazy to modify the logic of the rotation now
             // the spaceship in centered with the fron on 0degrees left is <0 and right is > 0
-            float baseAngle = glm::radians(Player->Rotation + 90.0f);  
+            float baseAngle = glm::radians(Player->Rotation + 90.0f);
 
             // 10degrees variation
             float angleOffset = ((float)(rand() % 1001) / 1000.0f) * 2.0f * MAX_OFFSET_DEGREES - MAX_OFFSET_DEGREES;
@@ -176,7 +168,7 @@ void Game::processInput(float dt) {
 
             // updated position so the bean spawns from the front of the ship
             glm::vec2 beanPos = Player->Position + Player->Size * 0.5f - glm::vec2(PROJECTILE_RADIUS);
-            
+
             glm::vec2 beanVelocity = direction * PROJECTILE_SPEED;
 
             ProjectileObject newBean(beanPos, PROJECTILE_RADIUS, beanVelocity, ResourceManager::getTexture2D("bean"));
@@ -224,7 +216,7 @@ void Game::processInput(float dt) {
 
 void Game::render() {
     if (this->State == GAME_ACTIVE) {
-        ResourceManager::getShader("sprite").use(); 
+        ResourceManager::getShader("sprite").use();
         // render the background
         Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(SCR_WIDTH, SCR_HEIGHT), 0.0f, COLOR_WHITE);
 
@@ -244,7 +236,7 @@ void Game::render() {
             Renderer->drawSpriteAnim(p.Sprite, p.Position, p.Size, p.Rotation, p.Color, p.Frame, p.MaxFrames);
         }
     }
-    
+
     if (this->State == GAME_TRANSITION) {
         Renderer->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0.0f, 0.0f), glm::vec2(SCR_WIDTH, SCR_HEIGHT), 0.0f, COLOR_WHITE);
 
@@ -253,7 +245,7 @@ void Game::render() {
 
         char congrats[100];
         sprintf(congrats, "WP, Level %d Done!", this->Level + 1);
-        
+
         ResourceManager::getText("default").render(ResourceManager::getShader("text_shader"), congrats, 220.0f, 200.0f, 1.0f, COLOR_WHITE);
         ResourceManager::getText("default").render(ResourceManager::getShader("text_shader"), "PRESS ENTER TO CONTINUE", 150.0f, 300.0f, 0.8f, COLOR_WHITE);
         return;
