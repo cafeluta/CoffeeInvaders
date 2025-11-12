@@ -14,11 +14,8 @@ It mixes nostalgia from classic brick-breaker / invader games with a unique twis
 3. [Gameplay](#gameplay)  
 4. [Installation & Build](#installation--build)  
 5. [Project Structure](#project-structure)  
-6. [Contributing](#contributing)  
-7. [Dependencies & Tech Stack](#dependencies--tech-stack)  
-8. [Roadmap](#roadmap)  
-9. [License](#license)  
-10. [Credits](#credits)  
+6. [Dependencies & Tech Stack](#dependencies--tech-stack)  
+
 
 ---
 
@@ -51,7 +48,7 @@ The goal: **clear all blocks in a level, collect as much coffee as possible, and
 - **Lives**: Losing all lives ends the game — but collected coffee might grant you extra chances.  
 
 **Controls** *(example, adjust to your actual implementation)*:  
-- Move: Arrow keys / WASD  
+- Move: WASD / Arrow Keys Rotate  
 - Shoot / Action: Spacebar  
 
 ---
@@ -65,3 +62,47 @@ The goal: **clear all blocks in a level, collect as much coffee as possible, and
    ```bash
    git clone https://github.com/cafeluta/CoffeeInvaders.git
    cd CoffeeInvaders
+
+## Project Structure
+.
+├── Makefile
+├── README.md
+├── assets
+├── build
+├── cfi.cpp
+├── game
+├── include
+│   ├── Engine
+│   ├── Game
+│   └── config.h
+├── levels
+│   ├── one.lvl
+│   └── two.lvl
+├── lib
+│   ├── dlg
+│   ├── freetype
+│   ├── ft2build.h
+│   ├── glad
+│   ├── linmath.h
+│   ├── stb_easy_font.h
+│   └── stb_image.h
+├── shaders
+│   ├── shader.fs
+│   ├── shader.vs
+│   ├── text.fs
+│   └── text.vs
+└── src
+    ├── Engine
+    ├── Game
+    └── stb_image.cpp
+
+## Dependencies & Tech Stack
+
+- **Language**: C / C++ (C11 recommended)
+- **Graphics**: GLFW 3.x (for window creation and input handling)
+- **Rendering**: OpenGL (3.x or higher)
+- **Build system**: Makefile (or CMake if preferred)
+- **Other libraries**: 
+  - `libglfw3` (runtime library for GLFW)
+  - `libglfw3-dev` (headers and development files for compiling)
+- **Supported OS**: Linux, (Windows/macOS if you provide builds)
